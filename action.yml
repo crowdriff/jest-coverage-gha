@@ -39,6 +39,7 @@ runs:
         path: ./.github/wiki/
 
     - name: Install yarn
+      shell: bash
       if: inputs.use_yarn == 'true'
       run: npm install -g yarn
 
@@ -76,5 +77,6 @@ runs:
         git commit -m "Update coverage" && git push
         
     - name: Uninstall yarn
+      shell: bash
       if: always()
       run: npm uninstall -g yarn
