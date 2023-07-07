@@ -27,7 +27,7 @@ else
 fi
 
 # Extract total coverage: the decimal number from the last line of the function report.
-COVERAGE=$(jq $JSON_COVERAGE_VAR $SCRIPT_DIR/$JSON_COVERAGE_FILE)
+COVERAGE=$(jq $JSON_COVERAGE_VAR $JSON_COVERAGE_FILE)
 
 echo "coverage: $COVERAGE% of statements"
 
