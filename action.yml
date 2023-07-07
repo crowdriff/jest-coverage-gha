@@ -38,13 +38,15 @@ runs:
         repository: ${{github.repository}}.wiki
         path: ./.github/wiki/
 
-    - name: Install dependencies
-      run: |
-        if [ "${{inputs.use_yarn}}" = true ]; then
-          yarn install
-        else
-          npm install
-        fi
+    - name: Install dependencies (yarn)
+      shell: bash
+      if: inputs.use_yarn == 'true'
+      run: yarn install
+
+    - name: Install dependencies (npm)
+      shell: bash
+      if: inputs.use_yarn != 'true'
+      run: npm install
 
     - name: Generate coverage report
       shell: bash
