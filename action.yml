@@ -1,0 +1,70 @@
+name: 'Jest coverage report gha'
+description: 'This action updates adds a unit test coverage SVG badge to your wiki'
+branding:
+  color: blue
+  icon: award
+
+inputs:
+  node_version:
+    description: Node version.
+    default: '18.x'
+  use_yarn:
+    description: Use Yarn
+    default: false
+  coverage_npm_script:
+    description: Npm command to generate coverage
+    default: 'test-coverage'
+  json_coverage_file:
+    description: json coverage report file to extract coverage % from
+    default: 'coverage/coverage-summary.json'
+  json_coverage_var:
+    description: Where in the json file to extract coverage % from
+    default: '.total.lines.pct'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{inputs.node_version}}
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Checkout wiki
+      uses: actions/checkout@v3
+      with:
+        repository: ${{github.repository}}.wiki
+        path: ./.github/wiki/
+
+    - name: Install dependencies
+      run: |
+        if [ "${{inputs.use_yarn}}" = true ]; then
+          yarn install
+        else
+          npm install
+        fi
+
+    - name: Generate coverage report
+      shell: bash
+      env:
+        USE_YARN: ${{inputs.use_yarn}}
+        COVERAGE_NPM_SCRIPT: ${{inputs.coverage_npm_script}}
+        JSON_COVERAGE_FILE: ${{inputs.json_coverage_file}}
+        JSON_COVERAGE_VAR: ${{inputs.json_coverage_var}}
+      run: |
+        ${{github.action_path}}/coverage.sh
+        mv ${{github.action_path}}/coverage.svg ./.github/wiki/
+        cat ${{github.action_path}}/coverage.log >> ./.github/wiki/coverage.log
+        sort -u -o ./.github/wiki/coverage.log ./.github/wiki/coverage.log
+
+    - name: Push to wiki
+      shell: bash
+      run: |
+        cd ./.github/wiki/
+        git add --all
+        git diff-index --quiet HEAD && exit
+        git config --local user.name "GitHub Action"
+        git config --local user.email "action@github.com"
+        git commit -m "Update coverage" && git push
