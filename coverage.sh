@@ -20,10 +20,10 @@ echo "SCRIPT_DIR: $SCRIPT_DIR"
 if [ $USE_YARN = true ]
 then
     echo "Using yarn"
-    npm run $COVERAGE_NPM_SCRIPT
+    yarn $COVERAGE_NPM_SCRIPT
 else
     echo "Using npm"
-    yarn run $COVERAGE_NPM_SCRIPT
+    npm run $COVERAGE_NPM_SCRIPT
 fi
 
 # Extract total coverage: the decimal number from the last line of the function report.
