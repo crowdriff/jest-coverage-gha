@@ -50,3 +50,21 @@ fi
 
 # Download the badge; store next to script.
 curl -s "https://img.shields.io/badge/coverage-$COVERAGE%25-$COLOR" > "$SCRIPT_DIR/coverage.svg"
+<<<<<<< Updated upstream
+=======
+
+# Check if CF_URL, CF_TOKEN, and COVERAGE are set
+if [[ -z "$CF_URL" ]] || [[ -z "$CF_TOKEN" ]] || [[ -z "$COVERAGE" ]]; then
+    echo "Error: Environment variables CF_URL, CF_TOKEN, and COVERAGE must be set."
+    exit 1
+fi
+
+# Make the curl request
+curl --location "$CF_URL" \
+--header "Content-Type: application/json" \
+--header "Token: $CF_TOKEN" \
+--data "{
+    \"repository\": \"$REPO_NAME\",
+    \"coverage\": $COVERAGE
+}"
+>>>>>>> Stashed changes

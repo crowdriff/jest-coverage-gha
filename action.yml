@@ -24,6 +24,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Get repository name
+      shell: bash
+      run: echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+
     - name: Setup node
       uses: actions/setup-node@v2
       with:
@@ -60,6 +64,7 @@ runs:
         COVERAGE_NPM_SCRIPT: ${{inputs.coverage_npm_script}}
         JSON_COVERAGE_FILE: ${{inputs.json_coverage_file}}
         JSON_COVERAGE_VAR: ${{inputs.json_coverage_var}}
+        REPO_NAME: ${{ env.REPOSITORY_NAME }}
       run: |
         ${{github.action_path}}/coverage.sh
         mv ${{github.action_path}}/coverage.svg ./.github/wiki/
