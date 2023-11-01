@@ -50,8 +50,6 @@ fi
 
 # Download the badge; store next to script.
 curl -s "https://img.shields.io/badge/coverage-$COVERAGE%25-$COLOR" > "$SCRIPT_DIR/coverage.svg"
-<<<<<<< Updated upstream
-=======
 
 # Check if CF_URL, CF_TOKEN, and COVERAGE are set
 if [[ -z "$CF_URL" ]] || [[ -z "$CF_TOKEN" ]] || [[ -z "$COVERAGE" ]]; then
@@ -67,4 +65,3 @@ curl --location "$CF_URL" \
     \"repository\": \"$REPO_NAME\",
     \"coverage\": $COVERAGE
 }"
->>>>>>> Stashed changes
